@@ -1,21 +1,29 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react"
+import { useState, type ChangeEvent, type FormEvent, useEffect } from "react"
 import { ScoreService } from "../services/scoreService"
 import { useAuth } from "../context/AuthContext"
 import { useNavigate } from "react-router"
 
 function Scores() {
-  const { isAuthenticated } = useAuth()
+  const { user, isAuthenticated, loading } = useAuth()
   const navigate = useNavigate()
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
 
+  useEffect(() => {
+    if (!isAuthenticated && !loading) {
+      navigate("/")
+    }
+  }, [isAuthenticated, loading, navigate])
+
+  if (loading) {
+    return <div className="text-center mt-10">Cargando...</div>
+  }
+
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     if (selectedFile) {
       setFile(selectedFile)
-      // Aquí podrías implementar la lógica para extraer el título de la primera línea del PDF
-      // Por ahora lo dejamos como un input separado
     }
   }
 
@@ -27,9 +35,10 @@ function Scores() {
     }
 
     try {
-      // Aquí deberías obtener el userId del usuario actual
-      const userId = "user-id" // Reemplazar con el ID real del usuario
-      await ScoreService.createScore(file, userId, title)
+      if (!user?.id) {
+        throw new Error("Usuario no autenticado")
+      }
+      await ScoreService.createScore(file, user.id.toString(), title)
       setMessage("Partitura subida exitosamente")
       setFile(null)
       setTitle("")
@@ -39,14 +48,8 @@ function Scores() {
     }
   }
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/")
-    }
-  }, [isAuthenticated, navigate])
-
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mt-16">
       <h1 className="text-3xl font-bold mb-6">Subir Partitura</h1>
       
       <form onSubmit={handleSubmit} className="max-w-lg">

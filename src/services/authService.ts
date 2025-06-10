@@ -7,6 +7,7 @@ console.log(API_URL_BASE)
 
 export class AuthService {
     static async registerUser(user: Partial<User>) {
+        console.log('Registrando usuario:', user);
         return await fetchAPI(API_URL_BASE+'/auth/register', {
             method: 'POST',
             headers: {
@@ -18,13 +19,16 @@ export class AuthService {
     }
 
     static async loginUser(email: string, password: string) {
-      return await fetchAPI(API_URL_BASE+'/auth/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include'
-    })
-  } 
+        console.log('Iniciando sesión con:', email);
+        const response = await fetchAPI(API_URL_BASE+'/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password }),
+            credentials: 'include'
+        });
+        console.log('Respuesta del login:', response);
+        return response;
+    }
 }

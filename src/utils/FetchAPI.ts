@@ -3,7 +3,7 @@ export const fetchAPI = async (endPoint: string, options = {}) => {
       const response = await fetch(endPoint, options);
   
       if (response.status == 401) {
-        window.location.href = "/";
+        // window.location.href = "/"; // Eliminado para evitar bucles
         throw new Error("Sesión expirada. Inicia sesión nuevamente");
       }
   
