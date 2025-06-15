@@ -15,7 +15,7 @@ function Navbar() {
         <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-4">
           <div className="flex justify-start space-x-3 rtl:space-x-reverse ml-12">
             <img src="../../src/assets/logo.png" className="h-14" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-semibold italic whitespace-nowrap">Harmonic Notations</span>
+            <img src="../../src/assets/Harmonic Notations.jpg" className="h-14" alt="Flowbite Logo" />
           </div>
           <div className="flex-1 flex justify-center">
             <button

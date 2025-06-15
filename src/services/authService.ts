@@ -31,4 +31,11 @@ export class AuthService {
         console.log('Respuesta del login:', response);
         return response;
     }
+
+    static async logoutUser() {
+        return await fetchAPI(API_URL_BASE+'/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+    }
 }

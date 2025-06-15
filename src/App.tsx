@@ -6,6 +6,8 @@ import { AuthProvider } from './context/AuthContext'
 import Scores from './pages/Scores'
 import ProtectedRoute from './components/ProtectedRoute'
 import Profile from './pages/Profile'
+import Score from './pages/Score'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
@@ -32,8 +34,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/score/:id"
+                element={
+                  <ProtectedRoute>
+                    <Score />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </div>
+          <Toaster position="top-right" />
         </div>
       </AuthProvider>
     </BrowserRouter>

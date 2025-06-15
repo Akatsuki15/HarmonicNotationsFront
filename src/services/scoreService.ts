@@ -6,14 +6,14 @@ console.log(API_URL_BASE)
 
 export class ScoreService {
     static async getScores() {
-        return await fetchAPI(API_URL_BASE+'/scores', {
+        return await fetchAPI(API_URL_BASE+'/score/', {
             method: 'GET',
             credentials: 'include'
         })
     }
 
     static async getScore(id: string) {
-        return await fetchAPI(API_URL_BASE+'/scores/'+id, {
+        return await fetchAPI(API_URL_BASE+'/score/'+id, {
             method: 'GET',
             credentials: 'include'
         })
@@ -37,6 +37,14 @@ export class ScoreService {
             method: 'POST',
             credentials: 'include',
             body: formData
+        })
+    }
+
+    static async updateScore(id: string, title: string) {
+        return await fetchAPI(API_URL_BASE+'/score/'+id, {
+            method: 'PUT',
+            credentials: 'include',
+            body: JSON.stringify({title})
         })
     }
 }

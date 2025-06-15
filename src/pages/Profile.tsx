@@ -1,9 +1,16 @@
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router';
+import { AuthService } from '../services/authService';
 
 function Profile() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth(); 
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await AuthService.logoutUser();
+    logout();
+    navigate('/');
+  }
 
   if (!user) {
     return (
@@ -26,7 +33,7 @@ function Profile() {
           <span className="block text-lg">{user.email}</span>
         </div>
         <button
-          onClick={() => { logout(); navigate('/'); }}
+          onClick={handleLogout}
           className="mt-6 w-full bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition-colors"
         >
           Cerrar sesión

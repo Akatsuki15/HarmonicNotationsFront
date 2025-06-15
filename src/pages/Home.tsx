@@ -33,7 +33,7 @@ function Home() {
       <div className="absolute inset-0 w-full h-full bg-black/40 z-10 hidden sm:block" />
       <div className="flex items-center gap-4 mt-5 ml-10 absolute z-20 hidden sm:flex">
         <img src="../../src/assets/logo.png" alt="Logo" className="h-20" />
-        <h1 className="text-4xl font-semibold italic text-white">Harmonic Notations</h1>
+        <img src="../../src/assets/Harmonic Notations.png" alt="Logo" className="h-18" />
       </div>
       <div className="sm:hidden flex flex-col items-center justify-center w-full h-full bg-violet-300">
         <div className="flex flex-col items-center mb-6 mt-8">
