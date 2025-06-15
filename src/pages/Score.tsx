@@ -534,23 +534,45 @@ function Score() {
   // Actualizar la posición y tamaño del canvas de PDF.js para alinear el canvas de dibujo
   useEffect(() => {
     if (!pdfPageRef.current) return;
+    
     const updateRect = () => {
       const pageLayer = pdfPageRef.current?.querySelector('canvas, .rpv-core__page-layer') as HTMLCanvasElement | null;
       if (pageLayer) {
         const containerRect = pdfPageRef.current.getBoundingClientRect();
         const pageRect = pageLayer.getBoundingClientRect();
-        setPdfCanvasRect({
+        
+        // Solo actualizar si hay un cambio significativo en las dimensiones
+        const newRect = {
           top: pageRect.top - containerRect.top,
           left: pageRect.left - containerRect.left,
           width: pageRect.width,
           height: pageRect.height
-        });
+        };
+        
+        if (!pdfCanvasRect || 
+            Math.abs(newRect.width - pdfCanvasRect.width) > 1 ||
+            Math.abs(newRect.height - pdfCanvasRect.height) > 1) {
+          setPdfCanvasRect(newRect);
+        }
       }
     };
+
+    // Usar ResizeObserver para detectar cambios de tamaño
+    const resizeObserver = new ResizeObserver(() => {
+      updateRect();
+    });
+
+    if (pdfPageRef.current) {
+      resizeObserver.observe(pdfPageRef.current);
+    }
+
+    // Actualización inicial
     updateRect();
-    window.addEventListener('resize', updateRect);
-    return () => window.removeEventListener('resize', updateRect);
-  }, [currentPage, pdfPageRef.current?.offsetWidth, pdfPageRef.current?.offsetHeight]);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [currentPage]); // Solo depender de currentPage
 
   if (!isAuthenticated) {
     return <div>Por favor, inicia sesión para acceder a esta página</div>
@@ -599,12 +621,25 @@ function Score() {
       <div className="flex-1 flex flex-col items-center justify-center py-8 px-2 bg-white">
         <div
           className="rounded-lg overflow-hidden bg-white flex flex-col items-center relative"
-          style={{width: '100%', maxWidth: 900, minHeight: 600, position: 'relative'}}
+          style={{
+            width: '100%',
+            maxWidth: '900px',
+            height: '1200px',
+            position: 'relative',
+            margin: '0 auto'
+          }}
           ref={pdfContainerRef}
         >
           <div 
             ref={pdfPageRef} 
-            style={{position:'relative', width:'100%', height:'100%'}} 
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }} 
             onMouseDown={handlePdfMouseDown}
             onMouseMove={handlePdfMouseMove}
             onMouseUp={handlePdfMouseUp}
